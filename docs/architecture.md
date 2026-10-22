@@ -90,6 +90,26 @@ headline so they're the first thing you see.
 policy in the catalog; the old "never records" claim must stay off the page
 (AC-3.3).
 
+### Extension: plan picker (copper-m1-ext)
+
+**Summary:** the Copper Plus section becomes interactive. Shoppers switch
+between Monthly, Yearly and Compare views of the prices, choose a plan, and see
+a "Your plan" summary of what they picked.
+
+| Piece | Where | What it does |
+|---|---|---|
+| Server section | `components/copper/landing/plus-pricing.tsx` | Reads `getPlans()` on the server and passes the plans down |
+| Client picker | `components/copper/landing/plan-picker.tsx` | `"use client"`; holds the billing view and picked plan in React state. `yearlyMath()` works out a year of monthly billing, the monthly equivalent of yearly billing, and the saving |
+| Tests | `tests/plan-picker.test.tsx` | Switching views, choosing a plan, the summary, and the yearly math |
+
+**Data flow:** catalog → `PlusPricing` (server) → `PlanPicker` props → clicks
+update state → cards and summary re-render. Nothing is saved or sent anywhere.
+
+**Decisions and trade-offs:** the catalog stays on the server and only the
+plans are passed to the client. The monthly view shows both prices in text, so
+the page still lists `$7.99` and `$79` together (AC-3.1). There's no checkout:
+the summary links back to the products instead (Module 1 non-goal).
+
 ## Adding a module
 
 When a module changes how the app fits together, add a section here:
